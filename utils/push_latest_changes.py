@@ -11,7 +11,7 @@ try:
 except Exception:
     print("Failed to fetch latest release information.")
 
-new_version = input("Enter new release version (e.g. '1.2.0'): ").strip()
+new_version = input("Enter new release version (e.g. 'v1.2.0'): ").strip()
 commit_message = input("Enter commit message: ").strip()
 
 Path("version.txt").write_text(new_version)
@@ -20,7 +20,7 @@ for args in [
     ["add", "-A"],
     ["commit", "-m", commit_message],
     ["push", "origin", "main"],
-    ["tag", "-f", f"v{new_version}"],
-    ["push", "-f", "origin", f"v{new_version}"],
+    ["tag", "-f", new_version],
+    ["push", "-f", "origin", new_version],
 ]:
     subprocess.run(["git", *args])
