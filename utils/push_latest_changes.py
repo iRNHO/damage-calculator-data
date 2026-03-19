@@ -2,40 +2,25 @@ import json
 import subprocess
 import urllib.request
 
+from pathlib import Path
 
-REPO = "iRNHO/damage-calculator-data"
+try:
+    data = urllib.request.urlopen("https://api.github.com/repos/iRNHO/damage-calculator-data/releases/latest").read()
+    print(f"Latest release: {json.loads(data)["tag_name"]}")
 
+except Exception:
+    print("Failed to fetch latest release information.")
 
-def get_latest():
-    try:
-        data = urllib.request.urlopen(
-            f"https://api.github.com/repos/{REPO}/releases/latest"
-        ).read()
-        return json.loads(data)["tag_name"]
-    except Exception:
-        return None
-
-
-latest = get_latest()
-print(f"Latest release: {latest}")
-
-new_tag = input("Enter new release version (e.g. 1.2.0): ").strip()
+new_version = input("Enter new release version (e.g. '1.2.0'): ").strip()
 commit_message = input("Enter commit message: ").strip()
 
-if not new_tag.startswith("v"):
-    new_tag = "v" + new_tag
+Path("version.txt").write_text(new_version)
 
-# 🔥 Write version.txt automatically
-with open("version.txt", "w") as f:
-    f.write(new_tag.lstrip("v"))
-
-commands = [
-    ["git", "add", "-A"],
-    ["git", "commit", "-m", commit_message],
-    ["git", "push", "origin", "main"],
-    ["git", "tag", "-f", new_tag],
-    ["git", "push", "-f", "origin", new_tag],
-]
-
-for command in commands:
-    subprocess.run(command)
+for args in [
+    ["add", "-A"],
+    ["commit", "-m", commit_message],
+    ["push", "origin", "main"],
+    ["tag", "-f", f"v{new_version}"],
+    ["push", "-f", "origin", f"v{new_version}"],
+]:
+    subprocess.run(["git", *args])

@@ -19,14 +19,20 @@ jobs:
       - name: Download latest spreadsheet
         run: python utils/download_latest_sheet.py
 
+      - name: Create release package
+        run: |
+          mkdir release
+          cp main.py release/
+          cp version.txt release/
+          cp "iRNHO's Spreadsheet.xlsx" release/
+          cp -r assets release/
+          cd release
+          zip -r ../damage-calculator.zip .
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            main.py
-            version.txt
-            iRNHO's Spreadsheet.xlsx
-            assets/**
+          files: damage-calculator.zip
           body: "Automated release from tag ${{ github.ref_name }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
