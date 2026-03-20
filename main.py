@@ -1,2 +1,2 @@
-print("Hello from Damage Calculator!")
+print("Hello from Damage Calculator!!")
 input("Press Enter to exit...")

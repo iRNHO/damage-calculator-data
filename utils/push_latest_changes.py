@@ -2,8 +2,6 @@ import json
 import subprocess
 import urllib.request
 
-from pathlib import Path
-
 try:
     data = urllib.request.urlopen("https://api.github.com/repos/iRNHO/damage-calculator-data/releases/latest").read()
     print(f"Latest release: {json.loads(data)["tag_name"]}")
@@ -13,8 +11,6 @@ except Exception:
 
 new_version = input("Enter new release version (e.g. 'v1.2.0'): ").strip()
 commit_message = input("Enter commit message: ").strip()
-
-Path("version.txt").write_text(new_version)
 
 for args in [
     ["add", "-A"],

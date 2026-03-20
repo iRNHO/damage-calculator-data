@@ -9,30 +9,28 @@ permissions:
   contents: write
 
 jobs:
-  release:
+  auto-release:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v5
+      - name: checkout-repository
+        uses: actions/checkout@v6
 
-      - name: Download latest spreadsheet
+      - name: download-spreadsheet
         run: python utils/download_latest_sheet.py
 
-      - name: Create release package
+      - name: package-data
         run: |
-          mkdir release
-          cp main.py release/
-          cp version.txt release/
-          cp "iRNHO's Spreadsheet.xlsx" release/
-          cp -r assets release/
-          cd release
-          zip -r ../damage-calculator.zip .
+          mkdir data
+          cp -r assets data/
+          cp "iRNHO's Spreadsheet.xlsx" main.py data/
+          cd data
+          zip -r ../data.zip .
 
-      - name: Create GitHub Release
+      - name: create-release
         uses: softprops/action-gh-release@v2
         with:
-          files: damage-calculator.zip
-          body: "Automated release from tag ${{ github.ref_name }}"
+          files: data.zip
+          body: "Auto Release (v${{ github.ref_name }})"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
