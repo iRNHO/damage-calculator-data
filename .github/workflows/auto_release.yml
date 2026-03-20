@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: download-spreadsheet
-        run: python utils/download_latest_sheet.py
+        run: python utils/download_spreadsheet.py
 
       - name: package-data
         run: |
