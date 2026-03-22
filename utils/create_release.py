@@ -10,14 +10,14 @@ try:
 except Exception:
     print("Failed to fetch latest release information.")
 
-new_version = input("Enter new release version (e.g. 'v1.2.3'): ").strip()
+new_version = input("Enter new release version (e.g. 'v1.2.3'): v").strip()
 commit_message = input("Enter commit message: ").strip()
 
 for args in [
     ["add", "-A"],
     ["commit", "-m", commit_message],
     ["push", "origin", "main"],
-    ["tag", "-f", new_version],
-    ["push", "-f", "origin", new_version],
+    ["tag", "-f", f"v{new_version}"],
+    ["push", "-f", "origin", f"v{new_version}"],
 ]:
     subprocess.run(["git"] + args)
